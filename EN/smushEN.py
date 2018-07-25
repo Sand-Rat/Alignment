@@ -1,3 +1,5 @@
+import sys
+
 def istitle(wordslist):
    return wordslist[0][-1] != "." and wordslist[1][0].isupper() and wordslist[2][0].isupper()
 
@@ -13,7 +15,8 @@ def initials(line):
     return pres
 
 if __name__ == "__main__":
-    inputFile = "file.txt"
+    inputFile = sys.argv[1]
+    outputFile = sys.argv[2]
     lines = []
     temp = []
     end_exceptions = []
@@ -25,7 +28,7 @@ if __name__ == "__main__":
     with open("start_exceptions.txt","r",encoding = "utf-16") as file:
         start_exceptions = file.read().split("\n")
 
-    with open(inputFile,"r", encoding="utf-16") as file:
+    with open(inputFile,"r", encoding="utf-8") as file:
         data = file.readlines()
 
         #Exceptions that start with an uppercase
@@ -91,7 +94,7 @@ if __name__ == "__main__":
 
         lines = list(filter(None, lines))
 
-    with open("alignmentSorted.txt","w",encoding = "utf-8") as file:
+    with open(outputFile,"w",encoding = "utf-8") as file:
         for i in lines:
             if not len(i) == 0 or not i.isspace() or i == "":
                 file.write(i + "\n")

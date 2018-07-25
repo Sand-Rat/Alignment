@@ -1,10 +1,12 @@
 import re
+import sys
 
 def hasNext(lines):
     pass
 
 if __name__ == "__main__":
-    inputFile = "file.txt"
+    inputFile = sys.argv[1]
+    outputFile = sys.argv[2]
     dictFile = "zh-dict.txt"
     endErrors = []
     startErrors = []
@@ -22,7 +24,7 @@ if __name__ == "__main__":
     with open ("breakErrorsStart.txt","r",encoding = "utf-16") as file:
         startErrors = file.read().split("\n")
 
-    with open (inputFile,"r",encoding = "utf-16") as file:
+    with open (inputFile,"r",encoding = "utf-8") as file:
         lines = []
         for _ in list(filter(None, file.read().split("\n"))):
             lines.append(_)
@@ -55,6 +57,6 @@ if __name__ == "__main__":
         for _ in lines:
             _.replace(" ","")
 
-    with open("alignmentSorted.txt","w",encoding = "utf-8") as file:
+    with open(outputFile,"w",encoding = "utf-8") as file:
         for _ in lines:
             file.write(_ + "\n")

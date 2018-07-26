@@ -1,8 +1,5 @@
 import re
 
-def hasNext(lines):
-    pass
-
 if __name__ == "__main__":
     inputFile = "file.txt"
     dictFile = "zh-dict.txt"

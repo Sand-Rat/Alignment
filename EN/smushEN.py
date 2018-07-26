@@ -3,9 +3,6 @@ import sys
 def istitle(wordslist):
    return wordslist[0][-1] != "." and wordslist[1][0].isupper() and wordslist[2][0].isupper()
 
-def removespace(wordslist):
-    return [k for k in wordslist if not len(k) == 0 or not k == "\n"]
-
 def initials(line):
     pres = False
     if len(line) > 3:
@@ -13,6 +10,12 @@ def initials(line):
             if line[-3] == " " or line[-3] == ".":
                 pres = True
     return pres
+
+def hasNext(iterator):
+    if next(iterator,None) == None:
+        return False
+    else:
+        return True
 
 if __name__ == "__main__":
     inputFile = sys.argv[1]
@@ -31,28 +34,22 @@ if __name__ == "__main__":
     with open(inputFile,"r", encoding="utf-8") as file:
         data = file.readlines()
 
-        #Exceptions that start with an uppercase
-        for x in start_exceptions:
-            for count in range(len(lines)-1,0,-1):
-                line = lines[count]
-                if (x in line.split(" ")[0]):
-                    lines[count-1] = " ".join([lines[count-1],lines[count]])
-                    lines[count] = ""
-
         lines = list(filter(None, lines))
 
+        #Splitting by full stops
         for _ in data:
             if ". " in _:
-                elem = _.split(". ")
-                for i in range(len(elem)-1):
-                    elem[i] = elem[i] + "."
-                for item in elem:
+                line = _.split(". ")
+                for i in range(len(line)-1):
+                    line[i] = line[i] + "."
+                for item in line:
                     temp.append(item)
             else:
                 temp.append(_)
 
         lines = list(filter(None, lines))
 
+        #Splitting by line breaks
         for _ in temp:
             if "\n" in _:
                 broke = _.split("\n")
@@ -68,29 +65,28 @@ if __name__ == "__main__":
            if istitle(microsegment):
                title_indices.append(i)
 
-        #Merging fragments by full stop and lowercase
+        #Merging fragments by full stop + lowercase, and exceptions with an uppercase
         for count in range(len(lines)-1,1,-1):
-            elem = lines[count]
-            if count not in title_indices:
-                if (elem[-1] == "." or elem[-1] == ":" or elem[-1] == ";") and (elem[0].islower()):
-                    lines[count-1] = " ".join([lines[count-1],lines[count]])
-                    lines[count] = ""
+            line = lines[count]
+            #if count not in title_indices:
+            if ((line[-1] == "." or line[-1] == ":" or line[-1] == ";") and (line[0].islower())) or ((line.split(" ")[0] in start_exceptions) and (lines[count-1][-1] != ".")):
+                lines[count-1] = " ".join([lines[count-1],lines[count]])
+                lines[count] = ""
 
         lines = list(filter(None, lines))
 
         #Exceptions with full stops/shouldn't end a sentence
-        global lines_range
-        lines_range = len(lines)
-        for x in end_exceptions:
-            count = 0
-            while(count<lines_range):
-                line = lines[count]
-                if (x == line.split(" ")[-1]) or initials(line):
-                    lines[count+1] = " ".join([lines[count],lines[count+1]])
-                    lines[count] = ""
-                count += 1
-                lines = list(filter(None, lines))
-                lines_range = len(lines)
+        #for x in end_exceptions:
+        count = 0
+        length = len(lines)
+        while (count<length-1):
+            line = lines[count]
+            if (line.split(" ")[-1] in end_exceptions) or initials(line):
+                lines[count+1] = " ".join([lines[count],lines[count+1]])
+                lines[count] = ""
+            count += 1
+            lines = list(filter(None, lines))
+            length = len(lines)
 
         lines = list(filter(None, lines))
 

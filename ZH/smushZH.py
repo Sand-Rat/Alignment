@@ -1,9 +1,6 @@
 import re
 import sys
 
-def hasNext(lines):
-    pass
-
 if __name__ == "__main__":
     inputFile = sys.argv[1]
     outputFile = sys.argv[2]

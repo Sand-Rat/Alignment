@@ -66,7 +66,7 @@ if __name__ == "__main__":
         for count in range(len(lines)-1,1,-1):
             line = lines[count]
             #if count not in title_indices:
-            if (line[-1] == "." or line[-1] == ":" or line[-1] == ";") and ((line[0].islower()) or (line.split(" ")[0] in start_exceptions)) and (lines[count-1][-1] != "."):
+            if ((line[-1] == "." or line[-1] == ":" or line[-1] == ";") and (line[0].islower())) or ((line.split(" ")[0] in start_exceptions) and (lines[count-1][-1] != ".")):
                 lines[count-1] = " ".join([lines[count-1],lines[count]])
                 lines[count] = ""
 
